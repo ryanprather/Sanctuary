@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsServiceFabricServiceProject>True</IsServiceFabricServiceProject>
+    <ServerGarbageCollection>True</ServerGarbageCollection>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <SelfContained>True</SelfContained>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.ServiceFabric" Version="10.1.2493" />
+    <PackageReference Include="Microsoft.ServiceFabric.Data" Version="7.1.2493" />
+    <PackageReference Include="Microsoft.ServiceFabric.Data.Extensions" Version="7.1.2493" />
+    <PackageReference Include="Microsoft.ServiceFabric.Data.Interfaces" Version="7.1.2493" />
+    <PackageReference Include="Microsoft.ServiceFabric.Services" Version="7.1.2493" />
+    <PackageReference Include="Microsoft.ServiceFabric.Services.Remoting" Version="7.1.2493" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\lib\Sanctuary.StatisticsManagment.Models\Sanctuary.StatisticsManagment.Models.csproj" />
+    <ProjectReference Include="..\Sanctuary.StatisticsManagment.Interfaces\Sanctuary.StatisticsManagment.Interfaces.csproj" />
+  </ItemGroup>
+
+</Project>

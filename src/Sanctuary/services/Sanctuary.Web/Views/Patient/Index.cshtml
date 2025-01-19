@@ -1,0 +1,61 @@
+﻿<div class="page-inner">
+    <h3 class="fw-bold mb-3">Patient Management</h3>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Actions</div>
+                </div>
+                <div class="card-body" style="margin:auto">
+                    <button id="btn-patient-add" class="btn btn-lg btn-success" style="margin:10px"><i class="fa fa-plus"></i> Add </button>
+                    <button id="btn-patient-edit" class="btn btn-lg btn-warning" style="margin:10px"><i class="fa fa-edit"> </i> Edit </button>
+                    <button id="btn-patient-remove" class="btn btn-lg btn-danger" style="margin:10px"><i class="fa fa-window-close"> </i> Remove </button>
+                    <button id="btn-patient-import" class="btn btn-lg btn-info" style="margin:10px"><i class="fa fa-file-code"> </i> Bulk Import </button>
+                    <button id="btn-patient-export" class="btn btn-lg btn-primary" style="margin:10px"><i class="fa fa-file-archive"> </i> Bulk Export </button>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Subjects</div>
+                </div>
+                <div class="card-body">
+                    <table id="subjects-table">
+                        <thead>
+                            <tr>
+                                <th data-field="Id" data-formatter="Page.detailsFormater"></th>
+                                <th data-field="patientId">Identifer</th>
+                                <th data-field="site">Site</th>
+                                <th data-field="isActive">Is Active</th>
+                                <th data-field="createdDate">Created Date</th>
+                                <th data-field="dataRangeStart"> Data Start</th>
+                                <th data-field="dataRangeEnd"> Data End</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="patient-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div id= "modal-container" class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="title"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script src="~/js/views/patient/Index.js"></script>
+}

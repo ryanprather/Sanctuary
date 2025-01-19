@@ -1,0 +1,84 @@
+﻿<div class="page-inner">
+    <!-- Card -->
+    <h3 class="fw-bold mb-3">Trail Information</h3>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card card-secondary bg-secondary-gradient">
+                <div class="card-body bubble-shadow">
+                    <h1>503</h1>
+                    <h5 class="op-8">Total Patients</h5>
+                    <div class="pull-right">
+                        <i class="fas fa-users"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card card-secondary bg-secondary-gradient">
+                <div class="card-body curves-shadow">
+                    <h1>23.5 Gb</h1>
+                    <h5 class="op-8">Total Data Stored</h5>
+                    <div class="pull-right">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card card-secondary bg-secondary-gradient">
+                <div class="card-body bubble-shadow">
+                    <h1>201</h1>
+                    <h5 class="op-8">Patients W/ Data</h5>
+                    <div class="pull-right">
+                        <i class="fas fa-users"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card card-secondary bg-secondary-gradient">
+                <div class="card-body curves-shadow">
+                    <h1>204</h1>
+                    <h5 class="op-8">Patients W/ out Data</h5>
+                    <div class="pull-right">
+                        <i class="fas fa-users"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Data Ingestion</div>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container">
+                        <canvas id="data-ingrest-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">Most Recent Files</div>
+                </div>
+                <div class="card-body">
+                    <table id="recent-files-table">
+                        <thead>
+                            <tr>
+                                <th data-field="fileName">Title</th>
+                                <th data-field="fileSize">File Size</th>
+                                <th data-field="uploadDate">Received Date</th>
+                                <th data-field="uploadType">Upload Type</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts {
+    <script src="~/js/views/dashboard/index.js"></script>
+}
