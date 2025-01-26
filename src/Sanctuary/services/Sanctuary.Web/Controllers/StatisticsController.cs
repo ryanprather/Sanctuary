@@ -1,11 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Sanctuary.Models;
 using Sanctuary.Models.Statistics;
-using Sanctuary.Web.Models.Patient;
 using ServiceRemoting;
 using StatisticsManagement.Interfaces;
 using StatisticsManagement.Models;
-using System.ComponentModel.DataAnnotations;
+using StatisticsRepository.Interfaces;
 
 namespace Sanctuary.Web.Controllers
 {
@@ -76,10 +75,14 @@ namespace Sanctuary.Web.Controllers
                 Description = "Test Execution",
                 Patients = new List<StatisticsPatientDto>() { new StatisticsPatientDto() {Id = Guid.NewGuid(), Identifier = "MalUOmqx" } }.ToArray(),
             };
-            var statsService = await _serviceRemotingFactory.GetStatefulServiceAsync<IStatisticsManagement>();
-            await statsService.EnqueueStatisticsJob(queueMessage);
+
+            var reppoService = await _serviceRemotingFactory.GetStatelessServiceAsync<IStatisticsRepository>();
+            var job = await reppoService.CreateStatisticsJobAsync( queueMessage );
             
-          return Ok();
+            var statsService = await _serviceRemotingFactory.GetStatefulServiceAsync<IStatisticsManagement>();
+            await statsService.EnqueueStatisticsJob(job);
+
+            return Ok();
         }
     }
 }

@@ -1,17 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Fabric;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using FluentResults;
 using Microsoft.ServiceFabric.Services.Communication.Runtime;
-using Microsoft.ServiceFabric.Services.Remoting.FabricTransport.Runtime;
 using Microsoft.ServiceFabric.Services.Remoting.V2.FabricTransport.Runtime;
 using Microsoft.ServiceFabric.Services.Runtime;
 using Sanctuary.Models.Statistics;
+using Sanctuary.Statistics.Repository.Repository;
 using StatisticsManagement.Models;
 using StatisticsRepository.Interfaces;
+using System.Fabric;
 
 namespace StatisticsRepository
 {
@@ -20,9 +14,12 @@ namespace StatisticsRepository
     /// </summary>
     internal sealed class StatisticsRepository : StatelessService, IStatisticsRepository
     {
-        public StatisticsRepository(StatelessServiceContext context)
+        private readonly IStatisticsDataRepository _statisticsDataContext;
+        public StatisticsRepository(StatelessServiceContext context, IStatisticsDataRepository dataContext)
             : base(context)
-        { }
+        {
+            _statisticsDataContext = dataContext;
+        }
 
         /// <summary>
         /// Optional override to create listeners (e.g., TCP, HTTP) for this service replica to handle client or user requests.
@@ -35,18 +32,33 @@ namespace StatisticsRepository
 
         public async Task<StatisticsJobProcessingDto> CreateStatisticsJobAsync(StatisticsQueueMessage queueMessage) 
         {
-            var job = new StatisticsJobProcessingDto() 
+            
+            var entityJob = await _statisticsDataContext.AddStatisticsJob(queueMessage.Description, 
+                queueMessage.DataFiles, queueMessage.Endpoints, queueMessage.Patients, 
+                queueMessage.StatsJobType);
+            
+            return new StatisticsJobProcessingDto() 
             {
-                Id = Guid.NewGuid(),
+                Id = entityJob.Id,
+                Description = entityJob.Description,
+                Completed = entityJob.Completed,
+                Created = entityJob.Created,
                 JobStatus = StatisticsJobStatus.Pending,
-                Created = DateTime.UtcNow,
-                DataFiles = queueMessage.DataFiles,
-                Description = queueMessage.Description,
-                PatientIds = queueMessage.Patients,
-                Endpoints = queueMessage.Endpoints,
                 StatsJobType = queueMessage.StatsJobType,
+                DataFiles = queueMessage.DataFiles,
+                Endpoints = queueMessage.Endpoints,
+                PatientIds = queueMessage.Patients    
             };
-            return job;
+        }
+
+        public async Task UpdateStartedDateForStatisticsJob(Guid id) 
+        {
+            await _statisticsDataContext.UpdateStatisticsJobStartDate(id);
+        }
+
+        public async Task UpdateCompletedDateForStatisticsJob(Guid id)
+        {
+            await _statisticsDataContext.UpdateStatisticsJobCompletedDate(id);
         }
     }
 }

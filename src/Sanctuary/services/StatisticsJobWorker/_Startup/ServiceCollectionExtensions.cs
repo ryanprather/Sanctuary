@@ -1,11 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using ServiceRemoting;
-using System;
-using System.Collections.Generic;
 using System.Fabric;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace StatisticsJobWorker._Startup
 {

@@ -18,6 +18,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\lib\StatisticsManagement.Models\StatisticsManagement.Models.csproj" />
+    <ProjectReference Include="..\..\shared\Sanctuary.Maps\Sanctuary.Maps.csproj" />
+    <ProjectReference Include="..\..\shared\ServiceRemoting\ServiceRemoting.csproj" />
     <ProjectReference Include="..\StatisticsRepository.Interfaces\StatisticsRepository.Interfaces.csproj" />
   </ItemGroup>
 

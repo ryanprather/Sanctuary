@@ -31,18 +31,18 @@ namespace StatisticsManagement
             _serviceRemotingFactory = serviceRemotingFactory;
         }
 
-        public async Task EnqueueStatisticsJob(StatisticsQueueMessage statisticsJob)
+        public async Task EnqueueStatisticsJob(StatisticsJobProcessingDto statisticsJob)
         {
             var queue = await this.StateManager
-                    .GetOrAddAsync<IReliableConcurrentQueue<StatisticsQueueMessage>>(StatisticsManagementQueueName);
+                    .GetOrAddAsync<IReliableConcurrentQueue<StatisticsJobProcessingDto>>(StatisticsManagementQueueName);
             using var tx = this.StateManager.CreateTransaction();
             await queue.EnqueueAsync(tx, statisticsJob);
             await tx.CommitAsync();
         }
 
-        public async Task<StatisticsQueueMessage?> DequeueStatisticsJob()
+        public async Task<StatisticsJobProcessingDto?> DequeueStatisticsJob()
         {
-            var queue = await this.StateManager.GetOrAddAsync<IReliableConcurrentQueue<StatisticsQueueMessage>>(StatisticsManagementQueueName);
+            var queue = await this.StateManager.GetOrAddAsync<IReliableConcurrentQueue<StatisticsJobProcessingDto>>(StatisticsManagementQueueName);
             
             if (queue.Count <= 0) return default;
             using var tx = this.StateManager.CreateTransaction();
@@ -52,16 +52,13 @@ namespace StatisticsManagement
             return item.Value;
         }
 
-        public async Task AddWorkItemToDictionary(StatisticsQueueMessage queueMessage) 
-        {
-            var repository = await _serviceRemotingFactory.GetStatelessServiceAsync<IStatisticsRepository>();
-            var newWorkItem = await repository.CreateStatisticsJobAsync(queueMessage);
-            
+        public async Task AddWorkItemToDictionary(StatisticsJobProcessingDto statisticsJobProcessingDto) 
+        {   
             var workItemDictionary = await this.StateManager.GetOrAddAsync<IReliableDictionary<Guid, StatisticsJobProcessingDto>>(StatisticsManagementDictionaryName);
             using var tx = this.StateManager.CreateTransaction();
             try
             {
-                await workItemDictionary.AddAsync(tx, newWorkItem.Id, newWorkItem);
+                await workItemDictionary.AddAsync(tx, statisticsJobProcessingDto.Id, statisticsJobProcessingDto);
                 await tx.CommitAsync();
             }
             catch

@@ -4,6 +4,7 @@ using System.Fabric;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.ServiceFabric.Services.Runtime;
+using StatisticsRepository._Startup;
 
 namespace StatisticsRepository
 {
@@ -12,7 +13,7 @@ namespace StatisticsRepository
         /// <summary>
         /// This is the entry point of the service host process.
         /// </summary>
-        private static void Main()
+        private static async Task Main()
         {
             try
             {
@@ -21,8 +22,8 @@ namespace StatisticsRepository
                 // When Service Fabric creates an instance of this service type,
                 // an instance of the class is created in this host process.
 
-                ServiceRuntime.RegisterServiceAsync("StatisticsRepositoryType",
-                    context => new StatisticsRepository(context)).GetAwaiter().GetResult();
+                await ServiceRuntime.RegisterServiceAsync("StatisticsRepositoryType",
+                    StatisticsRepositoryFactory.Create);
 
                 ServiceEventSource.Current.ServiceTypeRegistered(Process.GetCurrentProcess().Id, typeof(StatisticsRepository).Name);
 

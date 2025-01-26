@@ -25,6 +25,7 @@
     <ProjectReference Include="..\..\shared\ServiceRemoting\ServiceRemoting.csproj" />
     <ProjectReference Include="..\StatisticsJobWorker.Interfaces\StatisticsJobWorker.Interfaces.csproj" />
     <ProjectReference Include="..\StatisticsPatientWorker.Interfaces\StatisticsPatientWorker.Interfaces.csproj" />
+    <ProjectReference Include="..\StatisticsRepository.Interfaces\StatisticsRepository.Interfaces.csproj" />
   </ItemGroup>
 
 </Project>

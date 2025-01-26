@@ -10,8 +10,11 @@
     /// </summary>
     internal static class TableNames
     {
-        internal const string StatisticsJob = "StatisticsJobs";
-        internal const string StatisticalAnalysis = "StatisticalAnalyses";
-        internal const string StatisticsJobType = "StatisticsJobTypes";
+        internal const string StatisticsJob = "Jobs";
+        internal const string StatisticalResults = "StatisticalResults";
+        internal const string StatisticsJobTypes = "JobTypes";
+        internal const string StatisticsJobPatients = "JobPatients";
+        internal const string StatisticsJobDataFiles = "JobDataFiles";
+        internal const string StatisticsJobEndpoints = "JobEndpoints";
     }
 }

@@ -1,16 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.ServiceFabric.Actors;
 using Microsoft.ServiceFabric.Actors.Runtime;
-using Microsoft.ServiceFabric.Actors.Client;
-using StatisticsJobWorker.Interfaces;
-using ServiceRemoting;
 using Microsoft.ServiceFabric.Data;
 using Sanctuary.Models.Statistics;
+using ServiceRemoting;
+using StatisticsJobWorker.Interfaces;
 using StatisticsPatientWorker.Interfaces;
+using StatisticsRepository.Interfaces;
 
 namespace StatisticsJobWorker
 {
@@ -79,17 +74,24 @@ namespace StatisticsJobWorker
                 // update the status of execution // 
                 await this.StateManager.SetStateAsync(StatsJobStatusKey, StatisticsJobStatus.Processing);
                 processingRequest = await this.StateManager.TryGetStateAsync<StatisticsJobProcessingDto>(StatisticsJobKey);
+
+                var jobId = processingRequest.Value.Id;
                 
+                // update database //
+                var repositoryService = await _serviceRemotingFactory.GetStatelessServiceAsync<IStatisticsRepository>();
+                await repositoryService.UpdateStartedDateForStatisticsJob(jobId);
+
+                // process patients //
                 var patientTasks = new List<Task>();
-                foreach (var patient in processingRequest.Value.PatientIds) 
+                foreach (var patient in processingRequest.Value.PatientIds)
                 {
                     var patientActor = await _serviceRemotingFactory.GetActorServiceAsync<IStatisticsPatientWorker>(patient.Id);
                     patientTasks.Add(patientActor.ProcessPatientJob(patient, processingRequest.Value.DataFiles, processingRequest.Value.Endpoints, processingRequest.Value.StatsJobType));
                 }
-
                 await Task.WhenAll(patientTasks);
 
-
+                // update database //
+                await repositoryService.UpdateCompletedDateForStatisticsJob(jobId);
                 // remove reminder if exists to allow garbage collection
                 await RemoveReminder();
             }

@@ -5,8 +5,8 @@
         public Guid Id { get; set; }
         public string Description { get; set; }
         public StatisticsJobStatus JobStatus { get; set; }
-        public DateTime Created { get; set; }
-        public DateTime? Completed { get; set; }
+        public DateTimeOffset Created { get; set; }
+        public DateTimeOffset? Completed { get; set; }
         public DataFileDto[] DataFiles { get; set; }
         public StatisticsPatientDto[] PatientIds { get; set; }
         public DataFileEndpointDto[] Endpoints { get; set; }

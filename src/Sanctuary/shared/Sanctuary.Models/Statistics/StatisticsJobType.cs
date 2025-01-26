@@ -8,7 +8,7 @@ namespace Sanctuary.Models.Statistics
 {
     public enum StatisticsJobType
     {
-        OutlierAnalysis,
-        MovingAverage
+        OutlierAnalysis = 1,
+        MovingAverage = 2
     }
 }

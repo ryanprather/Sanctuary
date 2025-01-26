@@ -8,5 +8,7 @@ namespace StatisticsRepository.Interfaces
     public interface IStatisticsRepository : IService
     {
         Task<StatisticsJobProcessingDto> CreateStatisticsJobAsync(StatisticsQueueMessage queueMessage);
+        Task UpdateStartedDateForStatisticsJob(Guid id);
+        Task UpdateCompletedDateForStatisticsJob(Guid id);
     }
 }

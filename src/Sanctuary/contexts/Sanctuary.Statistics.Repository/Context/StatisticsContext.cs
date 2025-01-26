@@ -10,18 +10,17 @@ namespace Sanctuary.Statistics.Repository.Context
 {
     public class StatisticsContext: DbContext
     {
-        public DbSet<StatisticalAnalysis> StatisticalAnalyses { get; set; }
+        public DbSet<StatisticalResult> StatisticalResults { get; set; }
         public DbSet<StatisticsJob> StatisticsJobs { get; set; }
         public DbSet<StatisticsJobType> StatisticsJobTypes { get; set; }
-
+        public DbSet<StatisticsJobPatient> StatisticsJobPatients { get; set; }
+        public DbSet<StatisticsJobEndpoint> StatisticsJobEndpoints { get; set; }
+        public DbSet<StatisticsJobDataFile> StatisticsJobDataFiles { get; set; }
 
         public StatisticsContext() { }
         public StatisticsContext(DbContextOptions options) : base(options) { }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-
-        }
+        
 
 
 
