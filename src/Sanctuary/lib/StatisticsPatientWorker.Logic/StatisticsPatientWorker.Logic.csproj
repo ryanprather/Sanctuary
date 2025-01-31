@@ -6,4 +6,12 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\shared\ServiceRemoting\ServiceRemoting.csproj" />
+    <ProjectReference Include="..\Sanctuary.ChartWriter\Sanctuary.ChartWriter.csproj" />
+    <ProjectReference Include="..\Sanctuary.CsvDataReader\Sanctuary.CsvDataReader.csproj" />
+    <ProjectReference Include="..\Sanctuary.StatisticsCalculation\Sanctuary.StatisticsCalculation.csproj" />
+    <ProjectReference Include="..\StatisticsPatientWorker.Models\StatisticsPatientWorker.Models.csproj" />
+  </ItemGroup>
+
 </Project>

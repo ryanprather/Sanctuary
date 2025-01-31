@@ -1,9 +1,9 @@
 using Microsoft.ServiceFabric.Services.Communication.Runtime;
 using Microsoft.ServiceFabric.Services.Remoting.V2.FabricTransport.Runtime;
 using Microsoft.ServiceFabric.Services.Runtime;
+using Newtonsoft.Json;
 using Sanctuary.Models.Statistics;
 using Sanctuary.Statistics.Repository.Repository;
-using StatisticsManagement.Models;
 using StatisticsRepository.Interfaces;
 using System.Fabric;
 
@@ -30,25 +30,25 @@ namespace StatisticsRepository
             return new[] { new ServiceInstanceListener((c) => new FabricTransportServiceRemotingListener(c, this)) };
         }
 
-        public async Task<StatisticsJobProcessingDto> CreateStatisticsJobAsync(StatisticsQueueMessage queueMessage) 
+        public async Task<StatisticsJobDto> CreateStatisticsJobAsync(string description,StatisticsJobOptionsDto options) 
         {
             
-            var entityJob = await _statisticsDataContext.AddStatisticsJob(queueMessage.Description, 
-                queueMessage.DataFiles, queueMessage.Endpoints, queueMessage.Patients, 
-                queueMessage.StatsJobType);
+            var entityJob = await _statisticsDataContext.AddStatisticsJob(description, options);
             
-            return new StatisticsJobProcessingDto() 
+            return new StatisticsJobDto() 
             {
                 Id = entityJob.Id,
                 Description = entityJob.Description,
                 Completed = entityJob.Completed,
                 Created = entityJob.Created,
                 JobStatus = StatisticsJobStatus.Pending,
-                StatsJobType = queueMessage.StatsJobType,
-                DataFiles = queueMessage.DataFiles,
-                Endpoints = queueMessage.Endpoints,
-                PatientIds = queueMessage.Patients    
+                Options = JsonConvert.DeserializeObject<StatisticsJobOptionsDto>(entityJob.StatisticsJobDetailsJson)    
             };
+        }
+
+        public async Task BatchAddStatisticsResults(Guid statisicsJobId, StatisticsResultDto[] results)
+        {
+            await _statisticsDataContext.AddStatisticsJobResults(statisicsJobId, results);
         }
 
         public async Task UpdateStartedDateForStatisticsJob(Guid id) 

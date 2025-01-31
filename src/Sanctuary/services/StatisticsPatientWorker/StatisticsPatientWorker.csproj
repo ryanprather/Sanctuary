@@ -25,9 +25,11 @@
     <ProjectReference Include="..\..\lib\Sanctuary.ChartWriter\Sanctuary.ChartWriter.csproj" />
     <ProjectReference Include="..\..\lib\Sanctuary.CsvDataReader\Sanctuary.CsvDataReader.csproj" />
     <ProjectReference Include="..\..\lib\Sanctuary.StatisticsCalculation\Sanctuary.StatisticsCalculation.csproj" />
+    <ProjectReference Include="..\..\lib\StatisticsPatientWorker.Logic\StatisticsPatientWorker.Logic.csproj" />
     <ProjectReference Include="..\..\shared\Sanctuary.Models\Sanctuary.Models.csproj" />
     <ProjectReference Include="..\..\shared\ServiceRemoting\ServiceRemoting.csproj" />
     <ProjectReference Include="..\StatisticsPatientWorker.Interfaces\StatisticsPatientWorker.Interfaces.csproj" />
+    <ProjectReference Include="..\StatisticsRepository.Interfaces\StatisticsRepository.Interfaces.csproj" />
   </ItemGroup>
 
 </Project>

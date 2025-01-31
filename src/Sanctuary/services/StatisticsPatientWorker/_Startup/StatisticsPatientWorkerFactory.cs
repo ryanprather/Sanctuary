@@ -1,15 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.ServiceFabric.Actors.Runtime;
-using Sanctuary.CsvDataReader.Service;
-using Sanctuary.StatisticsCalculation.OutlierAnalysis;
 using ServiceRemoting;
-using StatisticsLib.MovingAverage;
-using System;
-using System.Collections.Generic;
+using StatisticsPatientWorker.Logic;
 using System.Fabric;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace StatisticsPatientWorker._Startup
 {
@@ -27,9 +20,7 @@ namespace StatisticsPatientWorker._Startup
                     service,
                     id,
                     serviceProvider.GetRequiredService<IServiceRemotingFactory>(),
-                    serviceProvider.GetRequiredService<IMovingAverageService>(),
-                    serviceProvider.GetRequiredService<IOutlierAnalysisService>(),
-                    serviceProvider.GetRequiredService<ICsvDataBlobReader>()));
+                    serviceProvider.GetRequiredService<IStatisticsPatientLogic>()));
         }
     }
 

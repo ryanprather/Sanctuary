@@ -53,12 +53,12 @@ namespace Sanctuary.Web.Controllers
                 new DataFileEndpointDto() { Name = "Temperture",DataType = "System.Int32" },
             };
 
-            var queueMessage = new StatisticsQueueMessage()
+            var options = new StatisticsJobOptionsDto()
             {
-                StatsJobType = new StatsJobTypeDto() 
+                StatsJobType = new StatisticsJobCalcuationOptionsDto() 
                 { 
                     JobType= StatisticsJobType.OutlierAnalysis,
-                    OutlierDevation = 2
+                    OutlierDeviation = 2
                 },
                 DataFiles = new List<DataFileDto>()
                 {
@@ -72,12 +72,11 @@ namespace Sanctuary.Web.Controllers
                 {
                     new DataFileEndpointDto() { Name = "Steps",DataType = "System.Int32" }
                 }.ToArray(),
-                Description = "Test Execution",
                 Patients = new List<StatisticsPatientDto>() { new StatisticsPatientDto() {Id = Guid.NewGuid(), Identifier = "MalUOmqx" } }.ToArray(),
             };
 
             var reppoService = await _serviceRemotingFactory.GetStatelessServiceAsync<IStatisticsRepository>();
-            var job = await reppoService.CreateStatisticsJobAsync( queueMessage );
+            var job = await reppoService.CreateStatisticsJobAsync("Test Execution", options);
             
             var statsService = await _serviceRemotingFactory.GetStatefulServiceAsync<IStatisticsManagement>();
             await statsService.EnqueueStatisticsJob(job);

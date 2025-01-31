@@ -2,12 +2,6 @@
 using Azure.Storage.Blobs.Models;
 using CsvHelper;
 using Sanctuary.StatisticsCalculation.OutlierAnalysis.Models;
-using System;
-using System.Collections.Generic;
-using System.Formats.Asn1;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Sanctuary.CsvDataWriter.Service
 {

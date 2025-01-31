@@ -48,7 +48,7 @@ namespace StatisticsJobWorker
             return Task.CompletedTask;
         }
 
-        public async Task InitStatisticsJobWorker(StatisticsJobProcessingDto statisticsJob)
+        public async Task InitStatisticsJobWorker(StatisticsJobDto statisticsJob)
         {
             // setup reminder //
             _reminder = await this.RegisterReminderAsync(
@@ -70,10 +70,10 @@ namespace StatisticsJobWorker
                 && processingState.Value == StatisticsJobStatus.Pending)
             {
 
-                var processingRequest = new ConditionalValue<StatisticsJobProcessingDto>(false, null);
+                var processingRequest = new ConditionalValue<StatisticsJobDto>(false, null);
                 // update the status of execution // 
                 await this.StateManager.SetStateAsync(StatsJobStatusKey, StatisticsJobStatus.Processing);
-                processingRequest = await this.StateManager.TryGetStateAsync<StatisticsJobProcessingDto>(StatisticsJobKey);
+                processingRequest = await this.StateManager.TryGetStateAsync<StatisticsJobDto>(StatisticsJobKey);
 
                 var jobId = processingRequest.Value.Id;
                 
@@ -83,10 +83,10 @@ namespace StatisticsJobWorker
 
                 // process patients //
                 var patientTasks = new List<Task>();
-                foreach (var patient in processingRequest.Value.PatientIds)
+                foreach (var patient in processingRequest.Value.Options.Patients)
                 {
                     var patientActor = await _serviceRemotingFactory.GetActorServiceAsync<IStatisticsPatientWorker>(patient.Id);
-                    patientTasks.Add(patientActor.ProcessPatientJob(patient, processingRequest.Value.DataFiles, processingRequest.Value.Endpoints, processingRequest.Value.StatsJobType));
+                    patientTasks.Add(patientActor.ProcessPatientJob(jobId, patient, processingRequest.Value.Options.DataFiles, processingRequest.Value.Options.Endpoints, processingRequest.Value.Options.StatsJobType));
                 }
                 await Task.WhenAll(patientTasks);
 

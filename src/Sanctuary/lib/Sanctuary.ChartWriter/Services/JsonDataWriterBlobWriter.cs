@@ -1,14 +1,7 @@
-﻿using Azure.Storage.Blobs.Models;
-using Azure.Storage.Blobs;
-using Sanctuary.ChartWriter.Models;
-using System;
-using System.Collections.Generic;
-using System.Formats.Asn1;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+﻿using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Models;
 using Newtonsoft.Json;
+using Sanctuary.ChartWriter.Models;
 
 namespace Sanctuary.ChartWriter.Services
 {
@@ -18,7 +11,7 @@ namespace Sanctuary.ChartWriter.Services
 
         public JsonDataWriterBlobWriter() { }
         
-        public async Task WriteOutlierChartToBlob(string containerName,string fileName, OutlierChartDto outlierChartDto)
+        public async Task<Uri> WriteOutlierChartToBlob(string containerName,string fileName, OutlierChartDto outlierChartDto)
         {
             try
             {
@@ -33,11 +26,14 @@ namespace Sanctuary.ChartWriter.Services
                 {
                     await writer.WriteAsync(JsonConvert.SerializeObject(outlierChartDto));
                 }
+                
+                return blockBlob.Uri;
             }
             catch (Exception ex)
             {
                 var ass = ex;
             }
+            return null;
         }
     }
 }

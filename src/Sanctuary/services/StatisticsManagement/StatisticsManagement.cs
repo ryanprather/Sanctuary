@@ -31,18 +31,18 @@ namespace StatisticsManagement
             _serviceRemotingFactory = serviceRemotingFactory;
         }
 
-        public async Task EnqueueStatisticsJob(StatisticsJobProcessingDto statisticsJob)
+        public async Task EnqueueStatisticsJob(StatisticsJobDto statisticsJob)
         {
             var queue = await this.StateManager
-                    .GetOrAddAsync<IReliableConcurrentQueue<StatisticsJobProcessingDto>>(StatisticsManagementQueueName);
+                    .GetOrAddAsync<IReliableConcurrentQueue<StatisticsJobDto>>(StatisticsManagementQueueName);
             using var tx = this.StateManager.CreateTransaction();
             await queue.EnqueueAsync(tx, statisticsJob);
             await tx.CommitAsync();
         }
 
-        public async Task<StatisticsJobProcessingDto?> DequeueStatisticsJob()
+        public async Task<StatisticsJobDto?> DequeueStatisticsJob()
         {
-            var queue = await this.StateManager.GetOrAddAsync<IReliableConcurrentQueue<StatisticsJobProcessingDto>>(StatisticsManagementQueueName);
+            var queue = await this.StateManager.GetOrAddAsync<IReliableConcurrentQueue<StatisticsJobDto>>(StatisticsManagementQueueName);
             
             if (queue.Count <= 0) return default;
             using var tx = this.StateManager.CreateTransaction();
@@ -52,9 +52,9 @@ namespace StatisticsManagement
             return item.Value;
         }
 
-        public async Task AddWorkItemToDictionary(StatisticsJobProcessingDto statisticsJobProcessingDto) 
+        public async Task AddWorkItemToDictionary(StatisticsJobDto statisticsJobProcessingDto) 
         {   
-            var workItemDictionary = await this.StateManager.GetOrAddAsync<IReliableDictionary<Guid, StatisticsJobProcessingDto>>(StatisticsManagementDictionaryName);
+            var workItemDictionary = await this.StateManager.GetOrAddAsync<IReliableDictionary<Guid, StatisticsJobDto>>(StatisticsManagementDictionaryName);
             using var tx = this.StateManager.CreateTransaction();
             try
             {
@@ -68,11 +68,11 @@ namespace StatisticsManagement
             }
         }
 
-        public async Task<List<StatisticsJobProcessingDto>> GetNextWorkItemsAsync(CancellationToken cancellationToken) 
+        public async Task<List<StatisticsJobDto>> GetNextWorkItemsAsync(CancellationToken cancellationToken) 
         {
-            var statsJobQueueList = new List<StatisticsJobProcessingDto>();
+            var statsJobQueueList = new List<StatisticsJobDto>();
             // Get dictionary
-            var workItemDictionary = await this.StateManager.GetOrAddAsync<IReliableDictionary<Guid, StatisticsJobProcessingDto>>(StatisticsManagementDictionaryName);
+            var workItemDictionary = await this.StateManager.GetOrAddAsync<IReliableDictionary<Guid, StatisticsJobDto>>(StatisticsManagementDictionaryName);
 
             // Get any available stats jobs to process //
             using (var tx = this.StateManager.CreateTransaction())
@@ -92,29 +92,26 @@ namespace StatisticsManagement
             return statsJobQueueList;
         }
 
-        public async Task ProcessStatsJobs(List<StatisticsJobProcessingDto> pendingStatsJobs)
+        public async Task ProcessStatsJobs(List<StatisticsJobDto> pendingStatsJobs)
         {
             // Get dictionary
-            var workItemDictionary = await this.StateManager.GetOrAddAsync<IReliableDictionary<Guid, StatisticsJobProcessingDto>>(StatisticsManagementDictionaryName);
+            var workItemDictionary = await this.StateManager.GetOrAddAsync<IReliableDictionary<Guid, StatisticsJobDto>>(StatisticsManagementDictionaryName);
             foreach (var kvp in pendingStatsJobs)
             {
                 using (var tx = this.StateManager.CreateTransaction())
                 {
                     try
                     {
-                        StatisticsJobProcessingDto updatedStatisticsJob;
+                        StatisticsJobDto updatedStatisticsJob;
                         var workItem = await workItemDictionary.TryGetValueAsync(tx, kvp.Id);
                         if (!workItem.HasValue)
                             continue;
 
-                        updatedStatisticsJob = new StatisticsJobProcessingDto();
+                        updatedStatisticsJob = new StatisticsJobDto();
                         updatedStatisticsJob.Id = workItem.Value.Id;
-                        updatedStatisticsJob.PatientIds = workItem.Value.PatientIds;
                         updatedStatisticsJob.Created = workItem.Value.Created;
-                        updatedStatisticsJob.DataFiles = workItem.Value.DataFiles;
                         updatedStatisticsJob.JobStatus = StatisticsJobStatus.Processing;
-                        updatedStatisticsJob.Endpoints = workItem.Value.Endpoints;
-                        updatedStatisticsJob.StatsJobType = workItem.Value.StatsJobType;
+                        updatedStatisticsJob.Options = workItem.Value.Options;
                         await workItemDictionary.SetAsync(tx, updatedStatisticsJob.Id, updatedStatisticsJob);
                         await tx.CommitAsync();
 

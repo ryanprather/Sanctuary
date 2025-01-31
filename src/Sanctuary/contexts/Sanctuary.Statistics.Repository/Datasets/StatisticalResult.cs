@@ -16,6 +16,8 @@ namespace Sanctuary.Statistics.Repository.Datasets
         [ForeignKey(nameof(StatisticsJobId))]
         public StatisticsJob StatisticsJob { get; set; }
 
-        public string GraphData { get; set; } = "{}"; 
+        public string? ChartDataUri { get; set; } = "";
+
+        public string? CsvDataUri { get; set; } = "";
     }
 }

@@ -17,6 +17,6 @@ namespace StatisticsJobWorker.Interfaces
     /// </summary>
     public interface IStatisticsJobWorker : IActor
     {
-        Task InitStatisticsJobWorker(StatisticsJobProcessingDto statisticsJob);
+        Task InitStatisticsJobWorker(StatisticsJobDto statisticsJob);
     }
 }

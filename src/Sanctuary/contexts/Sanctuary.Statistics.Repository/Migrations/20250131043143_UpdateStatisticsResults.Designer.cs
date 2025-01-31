@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Sanctuary.Statistics.Repository.Context;
 
@@ -11,9 +12,11 @@ using Sanctuary.Statistics.Repository.Context;
 namespace Sanctuary.Statistics.Repository.Migrations
 {
     [DbContext(typeof(StatisticsContext))]
-    partial class StatisticsContextModelSnapshot : ModelSnapshot
+    [Migration("20250131043143_UpdateStatisticsResults")]
+    partial class UpdateStatisticsResults
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -29,9 +32,11 @@ namespace Sanctuary.Statistics.Repository.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ChartDataUri")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("CsvDataUri")
+                    b.Property<string>("DataBlobUri")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("StatisticsJobId")

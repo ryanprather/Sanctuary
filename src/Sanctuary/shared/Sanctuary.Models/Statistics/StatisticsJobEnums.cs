@@ -11,4 +11,11 @@ namespace Sanctuary.Models.Statistics
         OutlierAnalysis = 1,
         MovingAverage = 2
     }
+    public enum StatisticsJobStatus
+    {
+        Pending = 0,
+        Processing = 1,
+        Completed = 2,
+        Errored = 3
+    }
 }

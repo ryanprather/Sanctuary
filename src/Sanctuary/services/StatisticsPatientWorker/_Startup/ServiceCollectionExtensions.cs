@@ -3,6 +3,7 @@ using Sanctuary.CsvDataReader.Service;
 using Sanctuary.StatisticsCalculation.OutlierAnalysis;
 using ServiceRemoting;
 using StatisticsLib.MovingAverage;
+using StatisticsPatientWorker.Logic;
 using System;
 using System.Collections.Generic;
 using System.Fabric;
@@ -20,7 +21,7 @@ namespace StatisticsPatientWorker._Startup
             services.AddTransient<ICsvDataBlobReader>(s => new CsvDataBlobReader());
             services.AddTransient<IMovingAverageService>(s => new MovingAverageService());
             services.AddTransient<IServiceRemotingFactory>(s => new ServiceRemotingFactory());
-            
+            services.AddTransient<IStatisticsPatientLogic, StatisticsPatientLogic>();
             return services;
         }
     }

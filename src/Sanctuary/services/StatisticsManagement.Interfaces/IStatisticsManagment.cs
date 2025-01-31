@@ -6,6 +6,6 @@ namespace StatisticsManagement.Interfaces
 {
     public interface IStatisticsManagement : IService
     {
-        Task EnqueueStatisticsJob(StatisticsJobProcessingDto statisticsJob);
+        Task EnqueueStatisticsJob(StatisticsJobDto statisticsJob);
     }
 }

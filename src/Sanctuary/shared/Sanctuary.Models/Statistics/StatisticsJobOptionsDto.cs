@@ -1,12 +1,13 @@
-﻿using Sanctuary.Models;
-using Sanctuary.Models.Statistics;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace StatisticsManagement.Models
+namespace Sanctuary.Models.Statistics
 {
-    public class StatisticsQueueMessage
+    public class StatisticsJobOptionsDto
     {
-        public Guid Id { get; set; }
-        public string Description {  get; set; }
         public DataFileDto[] DataFiles { get; set; }
         public StatisticsPatientDto[] Patients { get; set; }
         public DataFileEndpointDto[] Endpoints { get; set; }

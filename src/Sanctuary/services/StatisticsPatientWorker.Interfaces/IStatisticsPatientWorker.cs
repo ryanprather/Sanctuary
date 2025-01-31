@@ -18,6 +18,6 @@ namespace StatisticsPatientWorker.Interfaces
     /// </summary>
     public interface IStatisticsPatientWorker : IActor
     {
-        Task ProcessPatientJob(StatisticsPatientDto patientDto, DataFileDto[] dataFiles, DataFileEndpointDto[] dataFileEndpoints, StatsJobTypeDto statsJobType);
+        Task ProcessPatientJob(Guid jobId, StatisticsPatientDto patientDto, DataFileDto[] dataFiles, DataFileEndpointDto[] dataFileEndpoints, StatisticsJobCalcuationOptionsDto statsJobType);
     }
 }
