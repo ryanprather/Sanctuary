@@ -3,7 +3,6 @@ using Sanctuary.Models;
 using Sanctuary.Models.Statistics;
 using ServiceRemoting;
 using StatisticsManagement.Interfaces;
-using StatisticsManagement.Models;
 using StatisticsRepository.Interfaces;
 
 namespace Sanctuary.Web.Controllers
