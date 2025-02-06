@@ -14,6 +14,7 @@ using Microsoft.ServiceFabric.Services.Communication.Runtime;
 using Microsoft.ServiceFabric.Services.Runtime;
 using Microsoft.ServiceFabric.Data;
 using ServiceRemoting;
+using System.Text.Json.Serialization;
 
 namespace Sanctuary.Web
 {
@@ -57,14 +58,15 @@ namespace Sanctuary.Web
                         
                         // Add services to the container.
                         builder.Services.AddTransient<IServiceRemotingFactory>(s=> new ServiceRemotingFactory());
-;
-                        builder.Services.AddControllersWithViews();
+                        builder.Services
+                        .AddControllersWithViews();
+
                         var app = builder.Build();
                         if (!app.Environment.IsDevelopment())
                         {
-                        app.UseExceptionHandler("/Home/Error");
-                        // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                        app.UseHsts();
+                            app.UseExceptionHandler("/Home/Error");
+                            // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                            app.UseHsts();
                         }
                         app.UseHttpsRedirection();
                         app.UseStaticFiles();
@@ -73,7 +75,7 @@ namespace Sanctuary.Web
                         app.MapControllerRoute(
                         name: "default",
                         pattern: "{controller=Home}/{action=Index}/{id?}");
-                        
+
                         return app;
 
                     }))

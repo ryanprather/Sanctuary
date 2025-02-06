@@ -8,8 +8,9 @@ namespace Sanctuary.Statistics.Repository.Repository
         Task<StatisticsJob> AddStatisticsJob(string description, StatisticsJobOptionsDto options);
         Task UpdateStatisticsJobStartDate(Guid jobId);
         Task UpdateStatisticsJobCompletedDate(Guid jobId);
-
         Task AddStatisticsJobResults(Guid jobId, StatisticsResultDto[] statisticsResultDto);
+        Task<IList<StatisticsJob>> GetPreviousJobs();
+        Task<StatisticsJob> GetJobById(Guid Id);
 
     }
 }

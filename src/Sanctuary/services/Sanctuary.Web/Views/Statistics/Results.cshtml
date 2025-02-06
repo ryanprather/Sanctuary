@@ -1,0 +1,78 @@
+﻿@model Sanctuary.Models.Statistics.StatisticsJobDto
+
+@{
+    ViewData["Title"] = "Results";
+}
+<div class="page-inner">
+    <h1>@(Model.Description) - Results</h1>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card card-secondary bg-secondary-gradient">
+                <div class="card-body bubble-shadow">
+                    <h1>@(Model.Options.Patients.Length)</h1>
+                    <h5 class="op-8">Total Patients</h5>
+                    <div class="pull-right">
+                        <i class="fas fa-users"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card card-secondary bg-secondary-gradient">
+                <div class="card-body bubble-shadow">
+                    <h1>@(Model.Options.Endpoints.Length)</h1>
+                    <h5 class="op-8">Total Endpoints</h5>
+                    <div class="pull-right">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card card-secondary bg-secondary-gradient">
+                <div class="card-body bubble-shadow">
+                    <h1>@(Model.Options.DataFiles.Length)</h1>
+                    <h5 class="op-8">Total Files</h5>
+                    <div class="pull-right">
+                        <i class="fas fa-users"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <h4>StatisticsJobDto</h4>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.JobStatus)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.JobStatus)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.JobStatusStr)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.JobStatusStr)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Created)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Created)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Completed)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Completed)
+            </dd>
+        </dl>
+    </div>
+    <div>
+        @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+        <a asp-action="Index">Back to List</a>
+    </div>
+</div>

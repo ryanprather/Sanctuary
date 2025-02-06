@@ -1,7 +1,9 @@
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.ServiceFabric.Services.Communication.Runtime;
 using Microsoft.ServiceFabric.Services.Remoting.V2.FabricTransport.Runtime;
 using Microsoft.ServiceFabric.Services.Runtime;
 using Newtonsoft.Json;
+using Sanctuary.Maps;
 using Sanctuary.Models.Statistics;
 using Sanctuary.Statistics.Repository.Repository;
 using StatisticsRepository.Interfaces;
@@ -30,19 +32,19 @@ namespace StatisticsRepository
             return new[] { new ServiceInstanceListener((c) => new FabricTransportServiceRemotingListener(c, this)) };
         }
 
-        public async Task<StatisticsJobDto> CreateStatisticsJobAsync(string description,StatisticsJobOptionsDto options) 
+        public async Task<StatisticsJobDto> CreateStatisticsJobAsync(string description, StatisticsJobOptionsDto options)
         {
-            
+
             var entityJob = await _statisticsDataContext.AddStatisticsJob(description, options);
-            
-            return new StatisticsJobDto() 
+
+            return new StatisticsJobDto()
             {
                 Id = entityJob.Id,
                 Description = entityJob.Description,
                 Completed = entityJob.Completed,
                 Created = entityJob.Created,
                 JobStatus = StatisticsJobStatus.Pending,
-                Options = JsonConvert.DeserializeObject<StatisticsJobOptionsDto>(entityJob.StatisticsJobDetailsJson)    
+                Options = JsonConvert.DeserializeObject<StatisticsJobOptionsDto>(entityJob.StatisticsJobDetailsJson)
             };
         }
 
@@ -51,7 +53,7 @@ namespace StatisticsRepository
             await _statisticsDataContext.AddStatisticsJobResults(statisicsJobId, results);
         }
 
-        public async Task UpdateStartedDateForStatisticsJob(Guid id) 
+        public async Task UpdateStartedDateForStatisticsJob(Guid id)
         {
             await _statisticsDataContext.UpdateStatisticsJobStartDate(id);
         }
@@ -59,6 +61,34 @@ namespace StatisticsRepository
         public async Task UpdateCompletedDateForStatisticsJob(Guid id)
         {
             await _statisticsDataContext.UpdateStatisticsJobCompletedDate(id);
+        }
+
+        public async Task<StatisticsJobDto[]> GetPreviousJobs()
+        {
+            var result = await _statisticsDataContext.GetPreviousJobs();
+            return result.Select(x => new StatisticsJobDto
+            {
+                Id = x.Id,
+                Description = x.Description,
+                Completed = x.Completed,
+                Created = x.Created,
+                JobStatus = x.Status.ToEnum<StatisticsJobStatus>(StatisticsJobStatus.Errored),
+                Options = JsonConvert.DeserializeObject<StatisticsJobOptionsDto>(x.StatisticsJobDetailsJson),
+            }).ToArray();
+        }
+
+        public async Task<StatisticsJobDto> GetJobById(Guid Id)
+        {
+            var result = await _statisticsDataContext.GetJobById(Id);
+            return new StatisticsJobDto
+            {
+                Id = result.Id,
+                Description = result.Description,
+                Completed = result.Completed,
+                Created = result.Created,
+                JobStatus = result.Status.ToEnum<StatisticsJobStatus>(StatisticsJobStatus.Errored),
+                Options = JsonConvert.DeserializeObject<StatisticsJobOptionsDto>(result.StatisticsJobDetailsJson),
+            };
         }
     }
 }

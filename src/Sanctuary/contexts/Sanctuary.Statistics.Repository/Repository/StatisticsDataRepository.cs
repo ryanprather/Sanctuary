@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using Sanctuary.Models;
 using Sanctuary.Models.Statistics;
 using Sanctuary.Statistics.Repository.Context;
 using Sanctuary.Statistics.Repository.Datasets;
@@ -15,9 +14,7 @@ namespace Sanctuary.Statistics.Repository.Repository
             _context = statisticsContext;
         }
 
-        public async Task<StatisticsJob> AddStatisticsJob(
-            string description,
-            StatisticsJobOptionsDto options)
+        public async Task<StatisticsJob> AddStatisticsJob(string description, StatisticsJobOptionsDto options)
         {
             var statsJob = new StatisticsJob()
             {
@@ -96,6 +93,19 @@ namespace Sanctuary.Statistics.Repository.Repository
             {
                 var ass = ex.Message;
             }
+        }
+
+        public async Task<IList<StatisticsJob>> GetPreviousJobs() 
+        {
+            return await _context.StatisticsJobs
+                .Where(x=>x.Status == StatisticsJobStatus.Completed.ToString())
+                .ToListAsync();
+        }
+
+        public async Task<StatisticsJob> GetJobById(Guid Id)
+        {
+            return await _context.StatisticsJobs
+                .FirstOrDefaultAsync(x => x.Id == Id);
         }
     }
 }

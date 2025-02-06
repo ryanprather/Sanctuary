@@ -83,5 +83,22 @@ namespace Sanctuary.Web.Controllers
 
             return Ok();
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetPreviousJobs() 
+        {
+            var statsService = await _serviceRemotingFactory.GetStatelessServiceAsync<IStatisticsRepository>();
+            var results = await statsService.GetPreviousJobs();
+            return Ok(results);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Results(Guid id)
+        {
+            var statsService = await _serviceRemotingFactory.GetStatelessServiceAsync<IStatisticsRepository>();
+            var results = await statsService.GetJobById(id);
+            return View(results);
+        }
+
     }
 }
