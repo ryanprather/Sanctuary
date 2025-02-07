@@ -19,5 +19,7 @@ namespace Sanctuary.Statistics.Repository.Datasets
         public string? ChartDataUri { get; set; } = "";
 
         public string? CsvDataUri { get; set; } = "";
+
+        
     }
 }

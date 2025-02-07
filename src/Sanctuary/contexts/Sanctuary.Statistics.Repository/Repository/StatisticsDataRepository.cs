@@ -1,8 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using FluentResults;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using Sanctuary.Models.Statistics;
 using Sanctuary.Statistics.Repository.Context;
 using Sanctuary.Statistics.Repository.Datasets;
+using Sanctuary.Statistics.Repository.Models;
+using System.Reflection.Metadata;
 
 namespace Sanctuary.Statistics.Repository.Repository
 {
@@ -102,10 +105,28 @@ namespace Sanctuary.Statistics.Repository.Repository
                 .ToListAsync();
         }
 
-        public async Task<StatisticsJob> GetJobById(Guid Id)
+        public async Task<Result<StatisticsJob>> QueryJobAsync(QueryJobOptions options)
         {
-            return await _context.StatisticsJobs
-                .FirstOrDefaultAsync(x => x.Id == Id);
+            try
+            {
+                var query = _context.StatisticsJobs.AsNoTracking().AsQueryable();
+                if (options.IncludeResults.HasValue && options.IncludeResults.Value)
+                {
+                    query = query.Include(x => x.StatisticalResults
+                    .Where(result => result.StatisticsJobId == options.JobId));
+                }
+
+                var queryResult = await query.FirstOrDefaultAsync(x => x.Id == options.JobId);
+                
+                if(queryResult is not null)
+                    return Result.Ok(queryResult);
+                else
+                    return Result.Fail("job not found");
+            }
+            catch (Exception ex) 
+            {
+                return Result.Fail(ex.Message);
+            }
         }
     }
 }

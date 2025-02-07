@@ -1,5 +1,7 @@
-﻿using Sanctuary.Models.Statistics;
+﻿using FluentResults;
+using Sanctuary.Models.Statistics;
 using Sanctuary.Statistics.Repository.Datasets;
+using Sanctuary.Statistics.Repository.Models;
 
 namespace Sanctuary.Statistics.Repository.Repository
 {
@@ -10,7 +12,7 @@ namespace Sanctuary.Statistics.Repository.Repository
         Task UpdateStatisticsJobCompletedDate(Guid jobId);
         Task AddStatisticsJobResults(Guid jobId, StatisticsResultDto[] statisticsResultDto);
         Task<IList<StatisticsJob>> GetPreviousJobs();
-        Task<StatisticsJob> GetJobById(Guid Id);
+        Task<Result<StatisticsJob>> QueryJobAsync(QueryJobOptions options);
 
     }
 }

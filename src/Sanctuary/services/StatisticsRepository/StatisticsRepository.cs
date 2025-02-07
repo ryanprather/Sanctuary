@@ -5,6 +5,7 @@ using Microsoft.ServiceFabric.Services.Runtime;
 using Newtonsoft.Json;
 using Sanctuary.Maps;
 using Sanctuary.Models.Statistics;
+using Sanctuary.Statistics.Repository.Models;
 using Sanctuary.Statistics.Repository.Repository;
 using StatisticsRepository.Interfaces;
 using System.Fabric;
@@ -79,16 +80,26 @@ namespace StatisticsRepository
 
         public async Task<StatisticsJobDto> GetJobById(Guid Id)
         {
-            var result = await _statisticsDataContext.GetJobById(Id);
-            return new StatisticsJobDto
+            var result = await _statisticsDataContext.QueryJobAsync(new QueryJobOptions() { JobId = Id, IncludeResults = true });
+            if (result.IsSuccess)
             {
-                Id = result.Id,
-                Description = result.Description,
-                Completed = result.Completed,
-                Created = result.Created,
-                JobStatus = result.Status.ToEnum<StatisticsJobStatus>(StatisticsJobStatus.Errored),
-                Options = JsonConvert.DeserializeObject<StatisticsJobOptionsDto>(result.StatisticsJobDetailsJson),
-            };
+                return new StatisticsJobDto
+                {
+                    Id = result.Value.Id,
+                    Description = result.Value.Description,
+                    Completed = result.Value.Completed,
+                    Created = result.Value.Created,
+                    JobStatus = result.Value.Status.ToEnum<StatisticsJobStatus>(StatisticsJobStatus.Errored),
+                    Options = JsonConvert.DeserializeObject<StatisticsJobOptionsDto>(result.Value.StatisticsJobDetailsJson),
+                    StatisticsResults = result.Value.StatisticalResults.Select(x => new StatisticsResultDto()
+                    {
+                        ChartBlobUri = (x.ChartDataUri.IsNullOrEmpty()) ? null : new Uri($"{x.ChartDataUri}"),
+                        DataBlobUri = (x.CsvDataUri.IsNullOrEmpty()) ? null : new Uri($"{x.CsvDataUri}"),
+                    }).ToArray(),
+                };
+            }
+
+            return null;
         }
     }
 }

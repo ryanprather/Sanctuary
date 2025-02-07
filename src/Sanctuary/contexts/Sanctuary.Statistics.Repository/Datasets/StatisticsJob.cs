@@ -14,5 +14,6 @@ namespace Sanctuary.Statistics.Repository.Datasets
         public DateTimeOffset? Completed { get; set; }
         public string Status { get; set; }
         public string StatisticsJobDetailsJson { get; set; }
+        public virtual ICollection<StatisticalResult> StatisticalResults { get; set; } = new List<StatisticalResult>();
     }
 }

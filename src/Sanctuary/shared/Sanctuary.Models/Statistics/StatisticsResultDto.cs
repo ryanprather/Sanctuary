@@ -2,7 +2,7 @@
 {
     public class StatisticsResultDto
     {
-        public Uri ChartBlobUri { get; set; } = default;
-        public Uri DataBlobUri { get; set; } = default;
+        public Uri? ChartBlobUri { get; set; } = default;
+        public Uri? DataBlobUri { get; set; } = default;
     }
 }
