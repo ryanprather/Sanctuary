@@ -93,12 +93,30 @@ namespace StatisticsRepository
                     Options = JsonConvert.DeserializeObject<StatisticsJobOptionsDto>(result.Value.StatisticsJobDetailsJson),
                     StatisticsResults = result.Value.StatisticalResults.Select(x => new StatisticsResultDto()
                     {
+                        Id = x.Id,
+                        ResultOptions = JsonConvert.DeserializeObject<StatisticsResultOptions>(x.ResultOptionsJson),
                         ChartBlobUri = (x.ChartDataUri.IsNullOrEmpty()) ? null : new Uri($"{x.ChartDataUri}"),
                         DataBlobUri = (x.CsvDataUri.IsNullOrEmpty()) ? null : new Uri($"{x.CsvDataUri}"),
                     }).ToArray(),
                 };
             }
 
+            return null;
+        }
+
+        public async Task<StatisticsResultDto> GetResultsById(Guid Id)
+        {
+            var result = await _statisticsDataContext.QueryResultAsync(new QueryResultOptions() { ResultId = Id});
+            if (result.IsSuccess) 
+            {
+                return new StatisticsResultDto()
+                {
+                    Id = result.Value.Id,
+                    ChartBlobUri = (result.Value.ChartDataUri.IsNullOrEmpty()) ? null : new Uri($"{result.Value.ChartDataUri}"),
+                    DataBlobUri = (result.Value.CsvDataUri.IsNullOrEmpty()) ? null : new Uri($"{result.Value.CsvDataUri}"),
+                    ResultOptions = JsonConvert.DeserializeObject<StatisticsResultOptions>(result.Value.ResultOptionsJson),
+                };
+            }
             return null;
         }
     }

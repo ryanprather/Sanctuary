@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Sanctuary.Statistics.Repository.Context;
 
@@ -11,9 +12,11 @@ using Sanctuary.Statistics.Repository.Context;
 namespace Sanctuary.Statistics.Repository.Migrations
 {
     [DbContext(typeof(StatisticsContext))]
-    partial class StatisticsContextModelSnapshot : ModelSnapshot
+    [Migration("20250209141956_AddStatsResultsOPtions")]
+    partial class AddStatsResultsOPtions
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

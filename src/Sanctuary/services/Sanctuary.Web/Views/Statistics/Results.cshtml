@@ -40,6 +40,26 @@
             </div>
         </div>
     </div>
+    <div>
+        @foreach (var result in Model.StatisticsResults) 
+        {
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Result for @result.ResultOptions.PatientIdentifer</div>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas class="result-chart" data-chart-id="@result.Id"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        
+    </div>
+
+
 
     <div>
         <h4>StatisticsJobDto</h4>
@@ -76,3 +96,7 @@
         <a asp-action="Index">Back to List</a>
     </div>
 </div>
+
+@section scripts {
+    <script src="~/js/views/statistics/results.js"></script>
+}

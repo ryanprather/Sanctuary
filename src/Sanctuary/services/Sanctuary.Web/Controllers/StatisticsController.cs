@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Sanctuary.ChartReader.Services;
 using Sanctuary.Models;
 using Sanctuary.Models.Statistics;
 using ServiceRemoting;
@@ -11,13 +12,15 @@ namespace Sanctuary.Web.Controllers
     {
         private readonly ILogger<StatisticsController> _logger;
         private readonly IServiceRemotingFactory _serviceRemotingFactory;
+        private readonly IChartReaderService _chartReaderService;
         public StatisticsController(
             ILogger<StatisticsController> logger,
-            IServiceRemotingFactory serviceRemotingFactory
-            ) 
+            IServiceRemotingFactory serviceRemotingFactory,
+            IChartReaderService chartReaderService) 
         {
             _logger = logger;
             _serviceRemotingFactory = serviceRemotingFactory;
+            _chartReaderService = chartReaderService;
         }
 
         [HttpGet]
@@ -97,6 +100,16 @@ namespace Sanctuary.Web.Controllers
             var statsService = await _serviceRemotingFactory.GetStatelessServiceAsync<IStatisticsRepository>();
             var results = await statsService.GetJobById(id);
             return View(results);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetChartById(Guid id) 
+        {
+            var statsService = await _serviceRemotingFactory.GetStatelessServiceAsync<IStatisticsRepository>();
+            var results = await statsService.GetResultsById(id);
+            var chartData = await _chartReaderService.RetrieveChartData(results.ChartBlobUri);
+
+            return Ok(chartData);
         }
 
     }

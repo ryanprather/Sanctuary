@@ -10,7 +10,7 @@ namespace StatisticsRepository.Interfaces
         Task UpdateCompletedDateForStatisticsJob(Guid id);
         Task BatchAddStatisticsResults(Guid statisicsJobId, StatisticsResultDto[] results);
         Task<StatisticsJobDto[]> GetPreviousJobs();
-
         Task<StatisticsJobDto> GetJobById(Guid Id);
+        Task<StatisticsResultDto> GetResultsById(Guid Id);
     }
 }

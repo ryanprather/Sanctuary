@@ -86,6 +86,7 @@ namespace Sanctuary.Statistics.Repository.Repository
                 var results = statisticsResultDto.Select(x => new StatisticalResult()
                 {
                     StatisticsJobId = jobId,
+                    ResultOptionsJson = JsonConvert.SerializeObject(x.ResultOptions),
                     ChartDataUri = (x.ChartBlobUri != null) ? x.ChartBlobUri.ToString() : null,
                     CsvDataUri = (x.DataBlobUri != null) ? x.DataBlobUri.ToString() : null,
                 });
@@ -124,6 +125,29 @@ namespace Sanctuary.Statistics.Repository.Repository
                     return Result.Fail("job not found");
             }
             catch (Exception ex) 
+            {
+                return Result.Fail(ex.Message);
+            }
+        }
+
+        public async Task<Result<StatisticalResult>> QueryResultAsync(QueryResultOptions options)
+        {
+            try
+            {
+                var query = _context.StatisticalResults.AsNoTracking().AsQueryable();
+                if (options.IncludeJob.HasValue && options.IncludeJob.Value)
+                {
+                    query = query.Include(x => x.StatisticsJob);
+                }
+
+                var queryResult = await query.FirstOrDefaultAsync(x => x.Id == options.ResultId);
+
+                if (queryResult is not null)
+                    return Result.Ok(queryResult);
+                else
+                    return Result.Fail("job not found");
+            }
+            catch (Exception ex)
             {
                 return Result.Fail(ex.Message);
             }

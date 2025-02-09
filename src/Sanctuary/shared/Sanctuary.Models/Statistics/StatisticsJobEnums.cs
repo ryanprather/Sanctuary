@@ -18,4 +18,9 @@ namespace Sanctuary.Models.Statistics
         Completed = 2,
         Errored = 3
     }
+
+    public enum StatisticsResultType 
+    {
+        Patient = 0,
+    }
 }

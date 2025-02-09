@@ -1,20 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Fabric;
-using System.IO;
-using System.Linq;
-using System.Net;
-using System.Security.Cryptography.X509Certificates;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.ServiceFabric.Services.Communication.AspNetCore;
 using Microsoft.ServiceFabric.Services.Communication.Runtime;
 using Microsoft.ServiceFabric.Services.Runtime;
-using Microsoft.ServiceFabric.Data;
+using Sanctuary.ChartReader.Services;
 using ServiceRemoting;
-using System.Text.Json.Serialization;
+using System.Fabric;
+using System.Net;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Sanctuary.Web
 {
@@ -58,6 +49,7 @@ namespace Sanctuary.Web
                         
                         // Add services to the container.
                         builder.Services.AddTransient<IServiceRemotingFactory>(s=> new ServiceRemotingFactory());
+                        builder.Services.AddTransient<IChartReaderService>(s=> new ChartReaderService());
                         builder.Services
                         .AddControllersWithViews();
 

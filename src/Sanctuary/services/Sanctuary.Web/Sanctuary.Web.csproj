@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\contexts\Sanctuary.Statistics.Repository\Sanctuary.Statistics.Repository.csproj" />
+    <ProjectReference Include="..\..\lib\Sanctuary.ChartReader\Sanctuary.ChartReader.csproj" />
     <ProjectReference Include="..\..\lib\StatisticsManagement.Models\StatisticsManagement.Models.csproj" />
     <ProjectReference Include="..\..\shared\ServiceRemoting\ServiceRemoting.csproj" />
     <ProjectReference Include="..\StatisticsManagement.Interfaces\StatisticsManagement.Interfaces.csproj" />

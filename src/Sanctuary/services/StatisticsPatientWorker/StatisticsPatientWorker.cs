@@ -55,6 +55,7 @@ namespace StatisticsPatientWorker
             var results = await _logic.ProcessRequest(patientDto, dataFiles, dataFileEndpoints, statsJobType);
             var convertedResults = results.Select(x => new StatisticsResultDto() 
             {
+                ResultOptions = new StatisticsResultOptions() { PatientIdentifer = patientDto.Identifier},
                 ChartBlobUri = x.ChartBlobUri,
                 DataBlobUri = x.DataBlobUri,
             }).ToArray();

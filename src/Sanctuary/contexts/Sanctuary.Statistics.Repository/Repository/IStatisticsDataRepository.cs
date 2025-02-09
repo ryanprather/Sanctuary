@@ -13,6 +13,6 @@ namespace Sanctuary.Statistics.Repository.Repository
         Task AddStatisticsJobResults(Guid jobId, StatisticsResultDto[] statisticsResultDto);
         Task<IList<StatisticsJob>> GetPreviousJobs();
         Task<Result<StatisticsJob>> QueryJobAsync(QueryJobOptions options);
-
+        Task<Result<StatisticalResult>> QueryResultAsync(QueryResultOptions options);
     }
 }
