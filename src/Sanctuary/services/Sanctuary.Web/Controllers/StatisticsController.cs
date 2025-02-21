@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using Sanctuary.ChartReader.Services;
 using Sanctuary.Models;
 using Sanctuary.Models.Statistics;
+using Sanctuary.Web.Models.Patient;
 using ServiceRemoting;
 using StatisticsManagement.Interfaces;
 using StatisticsRepository.Interfaces;
@@ -29,9 +31,17 @@ namespace Sanctuary.Web.Controllers
             return View();
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateStatisticsJob()
+        [HttpGet]
+        public IActionResult Add() 
         {
+            ViewData["options"] = JsonConvert.SerializeObject(GetDefaultModel());
+            return PartialView(@"~/Views/Statistics/partials/_Add.cshtml");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Add(string form)
+        {
+            var ass = form;
             var timeStampColumn = new DataFileEndpointDto()
             {
                 Name = "DateTime",
@@ -110,6 +120,54 @@ namespace Sanctuary.Web.Controllers
             var chartData = await _chartReaderService.RetrieveChartData(results.ChartBlobUri);
 
             return Ok(chartData);
+        }
+
+        private StatisticsJobOptionsDto GetDefaultModel() 
+        {
+            var timeStampColumn = new DataFileEndpointDto()
+            {
+                Name = "DateTime",
+                DataType = "System.DateTime",
+            };
+
+            var keyColumn = new DataFileEndpointDto()
+            {
+                Name = "PatientId",
+                DataType = "System.String",
+            };
+
+            var dataEndpoints = new List<DataFileEndpointDto>()
+            {
+                new DataFileEndpointDto() { Name = "Steps",DataType = "System.Int32" },
+                new DataFileEndpointDto() { Name = "Kcals",DataType = "System.Double" },
+                new DataFileEndpointDto() { Name = "HeartRate",DataType = "System.Int32" },
+                new DataFileEndpointDto() { Name = "SleepMinutes",DataType = "System.Int32" },
+                new DataFileEndpointDto() { Name = "Mvpa",DataType = "System.Int32" },
+                new DataFileEndpointDto() { Name = "WearMinutes",DataType = "System.Int32" },
+                new DataFileEndpointDto() { Name = "Temperture",DataType = "System.Int32" },
+            };
+
+            return new StatisticsJobOptionsDto()
+            {
+                StatsJobType = new StatisticsJobCalcuationOptionsDto()
+                {
+                    JobType = StatisticsJobType.OutlierAnalysis,
+                    OutlierDeviation = 2
+                },
+                DataFiles = new List<DataFileDto>()
+                {
+                    new DataFileDto()
+                    {
+                        BlobUrl = "http://127.0.0.1:10000/devstoreaccount1/trial666/dailystats666.csv",
+                        FileMap = new DataFileMapDefinitionDto(timeStampColumn, keyColumn, dataEndpoints )
+                    }
+                }.ToArray(),
+                Endpoints = new List<DataFileEndpointDto>()
+                {
+                    new DataFileEndpointDto() { Name = "Steps",DataType = "System.Int32" }
+                }.ToArray(),
+                Patients = new List<StatisticsPatientDto>() { new StatisticsPatientDto() { Id = Guid.NewGuid(), Identifier = "MalUOmqx" } }.ToArray(),
+            };
         }
 
     }

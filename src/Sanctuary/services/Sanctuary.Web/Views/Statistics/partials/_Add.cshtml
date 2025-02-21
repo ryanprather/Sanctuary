@@ -1,0 +1,21 @@
+﻿<h4>Add Statistics Job</h4>
+<hr />
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="Add" asp-controller="Statistics" data-ajax="true" data-ajax-method="post" data-ajax-success="Page.AddJobSuccess">
+            <div class="form-group">
+                <label class="control-label">Data:</label>
+                <textarea id="options" class="form-control" cols=30 rows=30>@ViewData["options"]</textarea>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

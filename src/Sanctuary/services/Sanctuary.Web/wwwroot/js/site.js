@@ -35,6 +35,16 @@ $(function () {
     Page.Ready();
 });
 
+// The plugin
+$.fn.json_beautify = function () {
+    this.each(function () {
+        var el = $(this),
+            obj = JSON.parse(el.val()),
+            pretty = JSON.stringify(obj, undefined, 4);
+        el.val(pretty);
+    });
+};
+
 var global = {
 
     Ready: function () {

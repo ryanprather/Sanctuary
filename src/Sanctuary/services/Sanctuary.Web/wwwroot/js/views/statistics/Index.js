@@ -45,13 +45,32 @@
         return '<span class="badge bg-secondary">' + row.options.endpoints.length +'</span>';
     },
 
+    //buttonAddPopulate: function () {
+    //    $.ajax({
+    //        type: "POST",  // or "POST", "PUT", "DELETE", etc.
+    //        dataType: 'json',
+    //        url: "Statistics/CreateStatisticsJob",
+    //        success: function (data) {
+    //            console.log("Data:", data);
+    //        },
+    //        error: function (xhr, status, error) {
+    //            // Code to execute on error
+    //            console.error("Error:", error);
+    //        }
+    //    });
+    //},
+
+
     buttonAddPopulate: function () {
         $.ajax({
-            type: "POST",  // or "POST", "PUT", "DELETE", etc.
-            dataType: 'json',
-            url: "Statistics/CreateStatisticsJob",
+            type: "GET",  // or "POST", "PUT", "DELETE", etc.
+            dataType: 'html',
+            url: "Statistics/Add",
             success: function (data) {
                 console.log("Data:", data);
+                $('.modal-body').html(data);
+                $("#options").json_beautify();
+                $('#statistics-modal').modal('show');
             },
             error: function (xhr, status, error) {
                 // Code to execute on error
@@ -59,4 +78,11 @@
             }
         });
     },
+
+    AddJobSuccess: function () {
+        $('#statistics-modal').modal('hide');
+    },
 }
+
+
+
